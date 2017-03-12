@@ -3,7 +3,3 @@
 
 cd /home/pi
 sudo python light.py
-
-
-
-
