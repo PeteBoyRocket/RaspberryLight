@@ -102,10 +102,16 @@ def tempAndHumidity():
 				        TemperatureBit = TemperatureBit + "0"
  
         except Exception, e:
-                print "ERR_RANGE"
+                print "ERR_RANGE - Humidity or Temperature error"
 	        print e
 	        exit(0)
- 
+
+        Humidity = bin2dec(HumidityBit)
+        print "Humidity is: " +  Humidity
+
+        Temperature = bin2dec(TemperatureBit)
+        print "Temperature is: " + Temperature
+
         try:
 	        for i in range(0, 8):
 		        bit_count = 0
@@ -123,12 +129,9 @@ def tempAndHumidity():
 		        else:
 			        crc = crc + "0"
         except Exception, e:
-                print "ERR_RANGE"
+                print "ERR_RANGE - crc error"
 	        print e
- 
-        Humidity = bin2dec(HumidityBit)
-        Temperature = bin2dec(TemperatureBit)
- 
+
         if int(Humidity) + int(Temperature) - int(bin2dec(crc)) == 0:
 	        print "Humidity:"+ Humidity +"%"
 	        print "Temperature:"+ Temperature +"C"
