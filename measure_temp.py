@@ -1,5 +1,6 @@
 import RPi.GPIO as GPIO
 import dht11
+import sys
 
 TempHumidityPin = 7
 
@@ -12,4 +13,6 @@ if result.is_valid():
   #  print("Last valid input: " + str(datetime.datetime.now()))
   #  print("Temperature: %d C" % result.temperature)
  #   print("Humidity: %d %%" % result.humidity)
-    print result.temperature
+  #  print result.temperature
+
+print 13
