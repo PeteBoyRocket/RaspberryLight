@@ -122,7 +122,7 @@ def tempAndHumidity():
 			        crc = crc + "1"
 		        else:
 			        crc = crc + "0"
-         except Exception, e:
+        except Exception, e:
                 print "ERR_RANGE"
 	        print e
  
