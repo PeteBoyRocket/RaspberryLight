@@ -5,11 +5,11 @@ import time
 
 LightOnSecs = 10
 
+TempHumidityPin = 7
 SmartThingsPin = 11 # pin11 smartthings controlled pin --- GPIO-17
 LedPin = 13    # pin13 --- led GPIO-
 MovPin = 12    # pin12 --- movement sensor GPIO-18
 LightPin = 15 # pin15 --- light sensor GPIO-22
-TempHumidityPin = 26
 
 data = []
 
@@ -22,15 +22,7 @@ def setup():
         GPIO.setup(MovPin, GPIO.IN, pull_up_down=GPIO.PUD_UP)    # Set pins mode is input, and pull up to high level(3.3V)
         GPIO.setup(LightPin, GPIO.IN, pull_up_down=GPIO.PUD_UP)
         GPIO.output(LedPin, GPIO.HIGH) # Set LedPin high(+3.3V) to off led
-        
-        GPIO.setup(TempHumidityPin,GPIO.OUT)
-        GPIO.output(TempHumidityPin,GPIO.HIGH)
-        time.sleep(0.025)
-        GPIO.output(TempHumidityPin,GPIO.LOW)
-        time.sleep(0.02)
-        
-        GPIO.setup(TempHumidityPin, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-
+             
 def swMov(ev=None):
         global lastOnTime
 
@@ -65,6 +57,15 @@ def bin2dec(string_num):
         return str(int(string_num, 2))
 
 def tempAndHumidity():
+        
+        GPIO.setup(TempHumidityPin,GPIO.OUT)
+        GPIO.output(TempHumidityPin,GPIO.HIGH)
+        time.sleep(0.025)
+        GPIO.output(TempHumidityPin,GPIO.LOW)
+        time.sleep(0.02)
+        
+        GPIO.setup(TempHumidityPin, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+
         for i in range(0,500):
         	data.append(GPIO.input(TempHumidityPin))
         bit_count = 0
@@ -75,7 +76,7 @@ def tempAndHumidity():
         crc = ""
         
         try:
-	        while data[count] == 1:
+	        while data[count] == 1:                        
 		        tmp = 1
 		        count = count + 1
                 
