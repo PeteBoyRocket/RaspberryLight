@@ -66,7 +66,7 @@ def bin2dec(string_num):
 
 def tempAndHumidity():
         for i in range(0,500):
-        data.append(GPIO.input(4))
+        	data.append(GPIO.input(4))
         bit_count = 0
         tmp = 0
         count = 0
