@@ -12,7 +12,7 @@ LedPin = 13    # pin13 --- led GPIO-
 MovPin = 12    # pin12 --- movement sensor GPIO-18
 LightPin = 15 # pin15 --- light sensor GPIO-22
 
- instance = dht11.DHT11(TempHumidityPin)
+instance = dht11.DHT11(TempHumidityPin)
 
 #data = []
 
