@@ -9,6 +9,9 @@ SmartThingsPin = 11 # pin11 smartthings controlled pin --- GPIO-17
 LedPin = 13    # pin13 --- led GPIO-
 MovPin = 12    # pin12 --- movement sensor GPIO-18
 LightPin = 15 # pin15 --- light sensor GPIO-22
+TempHumidityPin = 26
+
+data = []
 
 lastOnTime = datetime.datetime(2000, 1, 1, 0, 0)
 
@@ -19,6 +22,14 @@ def setup():
         GPIO.setup(MovPin, GPIO.IN, pull_up_down=GPIO.PUD_UP)    # Set pins mode is input, and pull up to high level(3.3V)
         GPIO.setup(LightPin, GPIO.IN, pull_up_down=GPIO.PUD_UP)
         GPIO.output(LedPin, GPIO.HIGH) # Set LedPin high(+3.3V) to off led
+        
+        GPIO.setup(TempHumidityPin,GPIO.OUT)
+        GPIO.output(TempHumidityPin,GPIO.HIGH)
+        time.sleep(0.025)
+        GPIO.output(TempHumidityPin,GPIO.LOW)
+        time.sleep(0.02)
+        
+        GPIO.setup(TempHumidityPin, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
 def swMov(ev=None):
         global lastOnTime
@@ -49,6 +60,78 @@ def lightOn():
         print 'Light ON'
         lastOnTime = datetime.datetime.utcnow()
         GPIO.output(LedPin, GPIO.LOW)
+        
+def bin2dec(string_num):
+        return str(int(string_num, 2))
+
+def tempAndHumidity():
+        for i in range(0,500):
+        data.append(GPIO.input(4))
+        bit_count = 0
+        tmp = 0
+        count = 0
+        HumidityBit = ""
+        TemperatureBit = ""
+        crc = ""
+        
+        try:
+	        while data[count] == 1:
+		        tmp = 1
+		        count = count + 1
+                
+                for i in range(0, 32):
+		        bit_count = 0
+ 
+		        while data[count] == 0:
+			        tmp = 1
+			        count = count + 1
+ 
+		        while data[count] == 1:
+			        bit_count = bit_count + 1
+			        count = count + 1
+ 
+		        if bit_count > 3:
+			        if i>=0 and i<8:
+				        HumidityBit = HumidityBit + "1"
+			        if i>=16 and i<24:
+				        TemperatureBit = TemperatureBit + "1"
+		        else:
+			        if i>=0 and i<8:
+				        HumidityBit = HumidityBit + "0"
+			        if i>=16 and i<24:
+				        TemperatureBit = TemperatureBit + "0"
+ 
+        except:
+	        print "ERR_RANGE"
+	        exit(0)
+ 
+        try:
+	        for i in range(0, 8):
+		        bit_count = 0
+ 
+		        while data[count] == 0:
+			        tmp = 1
+			        count = count + 1
+ 
+		        while data[count] == 1:
+			        bit_count = bit_count + 1
+			        count = count + 1
+ 
+		        if bit_count > 3:
+			        crc = crc + "1"
+		        else:
+			        crc = crc + "0"
+        except:
+	        print "ERR_RANGE"
+ 
+        Humidity = bin2dec(HumidityBit)
+        Temperature = bin2dec(TemperatureBit)
+ 
+        if int(Humidity) + int(Temperature) - int(bin2dec(crc)) == 0:
+	        print "Humidity:"+ Humidity +"%"
+	        print "Temperature:"+ Temperature +"C"
+        else:
+	        print "ERR_CRC"
 
 def loop():
         GPIO.add_event_detect(MovPin, GPIO.FALLING, callback=swMov, bouncetime=200) # wait for falling and set bouncetime to prevent the callback function from being called multiple times when the button is pressed
@@ -66,6 +149,8 @@ def loop():
                         if elapsedTime.total_seconds() > LightOnSecs:
                                 lightOff()
 
+                tempAndHumidity()
+                
                 time.sleep(1)   # Don't do anything
 
 def destroy():
