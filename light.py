@@ -12,7 +12,9 @@ LedPin = 13    # pin13 --- led GPIO-
 MovPin = 12    # pin12 --- movement sensor GPIO-18
 LightPin = 15 # pin15 --- light sensor GPIO-22
 
-data = []
+ instance = dht11.DHT11(TempHumidityPin)
+
+#data = []
 
 lastOnTime = datetime.datetime(2000, 1, 1, 0, 0)
 
@@ -23,8 +25,6 @@ def setup():
         GPIO.setup(MovPin, GPIO.IN, pull_up_down=GPIO.PUD_UP)    # Set pins mode is input, and pull up to high level(3.3V)
         GPIO.setup(LightPin, GPIO.IN, pull_up_down=GPIO.PUD_UP)
         GPIO.output(LedPin, GPIO.HIGH) # Set LedPin high(+3.3V) to off led
-
-        instance = dht11.DHT11(TempHumidityPin)
              
 def swMov(ev=None):
         global lastOnTime
