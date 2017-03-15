@@ -10,4 +10,4 @@ https://github.com/nicholaswilde/berryio-smartthings/blob/master/includes/comman
 
 https://github.com/nicholaswilde/berryio-smartthings/blob/master/includes/functions/cpu.php
 
- sudo nano /usr/share/berryio/includes/Functions/cpu.php
+ sudo nano /usr/share/berryio/includes/functions/cpu.php
