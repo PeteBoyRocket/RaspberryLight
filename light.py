@@ -101,8 +101,9 @@ def tempAndHumidity():
 			        if i>=16 and i<24:
 				        TemperatureBit = TemperatureBit + "0"
  
-        except:
-	        print "ERR_RANGE"
+        except Exception, e:
+                print "ERR_RANGE"
+	        print e
 	        exit(0)
  
         try:
@@ -121,8 +122,9 @@ def tempAndHumidity():
 			        crc = crc + "1"
 		        else:
 			        crc = crc + "0"
-        except:
-	        print "ERR_RANGE"
+         except Exception, e:
+                print "ERR_RANGE"
+	        print e
  
         Humidity = bin2dec(HumidityBit)
         Temperature = bin2dec(TemperatureBit)
